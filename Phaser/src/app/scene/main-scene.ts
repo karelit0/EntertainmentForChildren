@@ -9,6 +9,12 @@ export class MainScene extends Phaser.Scene {
 
   player: PlayerSprite;
 
+  skyBackground: Phaser.GameObjects.TileSprite;
+  mountainBackground: Phaser.GameObjects.TileSprite;
+  treeBackground: Phaser.GameObjects.TileSprite;
+  floorBackground: Phaser.GameObjects.TileSprite;
+  ceilingBackground: Phaser.GameObjects.TileSprite;
+
   constructor() {
     super({ key: 'main' });
 
@@ -33,11 +39,11 @@ export class MainScene extends Phaser.Scene {
   create() {
     console.log('create method');
 
-    this.add.image(960, 540, 'layer_01');
-    this.add.image(960, 540, 'layer_02');
-    this.add.image(960, 540, 'layer_03');
-    this.add.image(960, 540, 'layer_04');
-    this.add.image(960, 540, 'layer_05');
+    this.ceilingBackground = this.add.tileSprite(960, 540, 1920, 1080, 'layer_01');
+    this.skyBackground = this.add.tileSprite(960, 540, 1920, 1080, 'layer_02');
+    this.mountainBackground = this.add.tileSprite(960, 540, 1920, 1080, 'layer_03');
+    this.treeBackground = this.add.tileSprite(960, 540, 1920, 1080, 'layer_04');
+    this.floorBackground = this.add.tileSprite(960, 540, 1920, 1080, 'layer_05');
 
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(960, 922, 'ground', null, false);
@@ -61,6 +67,11 @@ export class MainScene extends Phaser.Scene {
 
   update() {
     console.log('update method');
+    this.ceilingBackground.tilePositionX += 0.05;
+    this.skyBackground.tilePositionX -= 0.1;
+    this.mountainBackground.tilePositionX += 0.1;
+    this.treeBackground.tilePositionX -= 0.2;
+    this.floorBackground.tilePositionX += 0.2;
 
     this.player.update();
 
