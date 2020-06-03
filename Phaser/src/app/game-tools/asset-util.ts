@@ -16,7 +16,6 @@ export class AssetUtil {
             load.image(imageKey, imageFile);
         }
     }
-
     static createAssetAnimation(anims: Phaser.Animations.AnimationManager, assetName: string, framesToLoad: number) {
         const frames: Phaser.Types.Animations.AnimationFrame[] = [];
 
@@ -63,6 +62,14 @@ export class AssetUtil {
         this.loadCharacterImageAssets(load, 'ninjaGirl', 'Throw', 10);
     }
 
+    static loadFullEnemyImageAssets(load: Phaser.Loader.LoaderPlugin) {
+        for (let i = 1; i <= 5; i++) {
+            this.loadCharacterImageAssets(load, 'enemy' + i, 'Die', 9);
+            this.loadCharacterImageAssets(load, 'enemy' + i, 'Flying', 4);
+            this.loadCharacterImageAssets(load, 'enemy' + i, 'Idle', 4);
+        }
+    }
+
     static createFullCharacterAnimation(anims: Phaser.Animations.AnimationManager) {
         this.createCharacterAnimation(anims, 'ninjaGirl', 'Attack', 10);
         this.createCharacterAnimation(anims, 'ninjaGirl', 'Climb', 10);
@@ -76,6 +83,14 @@ export class AssetUtil {
         this.createCharacterAnimation(anims, 'ninjaGirl', 'Run', 10);
         this.createCharacterAnimation(anims, 'ninjaGirl', 'Slide', 10);
         this.createCharacterAnimation(anims, 'ninjaGirl', 'Throw', 10);
+    }
+
+    static createFullEnemiesAnimation(anims: Phaser.Animations.AnimationManager) {
+        for (let i = 1; i <= 5; i++) {
+            this.createCharacterAnimation(anims, 'enemy' + i, 'Die', 9);
+            this.createCharacterAnimation(anims, 'enemy' + i, 'Flying', 4);
+            this.createCharacterAnimation(anims, 'enemy' + i, 'Idle', 4);
+        }
     }
 
     static loadCharacterImageAssets(load: Phaser.Loader.LoaderPlugin, characterName: string, characterState: string, imagesToLoad: number) {

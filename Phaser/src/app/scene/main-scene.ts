@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 import { PlayerSprite } from '../game-tools/player.sprite';
 import { AssetUtil } from '../game-tools/asset-util';
+import { EnemySprite } from '../game-tools/enemy.sprite';
+import { GameOptions } from '../game-tools/game-options';
+import { utils } from 'protractor';
+import { Util } from '../game-tools/util';
 
 export class MainScene extends Phaser.Scene {
   platforms: Phaser.Physics.Arcade.StaticGroup | Phaser.GameObjects.Group;
@@ -8,6 +12,7 @@ export class MainScene extends Phaser.Scene {
   heart: Phaser.GameObjects.Sprite;
 
   player: PlayerSprite;
+  enemies: EnemySprite[];
 
   skyBackground: Phaser.GameObjects.TileSprite;
   mountainBackground: Phaser.GameObjects.TileSprite;
@@ -34,6 +39,7 @@ export class MainScene extends Phaser.Scene {
 
     AssetUtil.loadImageAssets(this.load, 'heart', 10);
     AssetUtil.loadFullCharacterImageAssets(this.load);
+    AssetUtil.loadFullEnemyImageAssets(this.load);
   }
 
   create() {
@@ -46,27 +52,30 @@ export class MainScene extends Phaser.Scene {
     this.floorBackground = this.add.tileSprite(960, 540, 1920, 1080, 'layer_05');
 
     this.platforms = this.physics.add.staticGroup();
-    this.platforms.create(960, 922, 'ground', null, false);
+    this.platforms.create(960, GameOptions.groundPositionY, 'ground', null, false);
 
     AssetUtil.createFullCharacterAnimation(this.anims);
+    AssetUtil.createFullEnemiesAnimation(this.anims);
 
     this.player = new PlayerSprite(this, 0, 0, 'ninjaGirl_Idle');
     this.player.setSize(280, 500);
     this.player.setOffset(0, 0);
     this.player.setOrigin(0, 0);
     this.player.setScale(0.2);
-    this.player.setBounce(0.2);
+    this.player.setBounce(0);
     this.player.setCollideWorldBounds(true);
+
+    this.enemies = [];
 
     this.add.existing(this.player);
 
-    this.physics.add.collider(this.player, this.platforms, () => this.player.onHitPlatform());
+    this.physics.add.collider(this.player, this.platforms);
 
   }
 
-
   update() {
     console.log('update method');
+
     this.ceilingBackground.tilePositionX += 0.05;
     this.skyBackground.tilePositionX -= 0.1;
     this.mountainBackground.tilePositionX += 0.1;
@@ -75,7 +84,28 @@ export class MainScene extends Phaser.Scene {
 
     this.player.update();
 
+    this.updateEnemies();
   }
 
+  updateEnemies() {
+    if (this.enemies.length < 5) {
+      for (let i = 1; i <= 5; i++) {
+        const newEnemyPositionX: number = (GameOptions.width / 2) + 200 * i;
+        const newEnemyPositionY: number = Util.getRandomInt(0, GameOptions.height / 3);
+        const newEnemyName: string = 'enemy' + i;
 
+        const newEnemy = new EnemySprite(this, newEnemyPositionX, newEnemyPositionY, newEnemyName)
+
+        this.add.existing(newEnemy);
+
+        this.physics.add.collider(newEnemy, this.platforms);
+
+        this.enemies.push(newEnemy);
+      }
+    }
+
+    this.enemies.forEach(enemy => {
+      enemy.update();
+    });
+  }
 }

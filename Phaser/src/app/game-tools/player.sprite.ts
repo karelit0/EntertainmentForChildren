@@ -41,7 +41,9 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
                 if (this.cursors.up.isDown) {
                     this.setVelocityY(-150);
                 } else {
-                    this.setVelocityY(150);
+                    if (!this.body.blocked.down) {
+                        this.setVelocityY(150);
+                    }
                 }
             }
 
@@ -54,14 +56,13 @@ export class PlayerSprite extends Phaser.Physics.Arcade.Sprite {
                 } else {
                     this.setFlip(false, false);
                     this.setVelocityX(160);
-
                 }
             }
         } else {
             this.isBusy = false;
         }
 
-        if (this.hitGround) {
+        if (this.body.blocked.down) {
             if (this.isBusy) {
                 this.anims.play('ninjaGirl_Run', true);
             } else {

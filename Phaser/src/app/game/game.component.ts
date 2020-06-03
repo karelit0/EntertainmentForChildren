@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MainScene } from '../scene/main-scene';
 import Phaser from 'phaser';
+import { GameOptions } from '../game-tools/game-options';
 
 @Component({
   selector: 'app-game',
@@ -15,16 +16,18 @@ export class GameComponent implements OnInit {
 
     this.config = {
       type: Phaser.AUTO,
-      width: 1920,
-      height: 1080,
+      width: GameOptions.width,
+      height: GameOptions.height,
       scene: [MainScene],
       physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 100 },
-            debug: false
+          gravity: {
+            y: GameOptions.gravity
+          },
+          debug: true
         }
-    },
+      },
     };
   }
 
