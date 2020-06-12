@@ -3,8 +3,10 @@ import { PlayerSprite } from '../game-tools/player.sprite';
 import { AssetUtil } from '../game-tools/asset-util';
 import { EnemySprite } from '../game-tools/enemy.sprite';
 import { GameOptions } from '../game-tools/game-options';
-import { utils } from 'protractor';
 import { Util } from '../game-tools/util';
+import { EnemyMap } from '../game-tools/enemy.map';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Enemy } from '../game-tools/enemy.enum';
 
 export class MainScene extends Phaser.Scene {
   platforms: Phaser.Physics.Arcade.StaticGroup | Phaser.GameObjects.Group;
@@ -12,18 +14,19 @@ export class MainScene extends Phaser.Scene {
   heart: Phaser.GameObjects.Sprite;
 
   player: PlayerSprite;
-  enemies: EnemySprite[];
+  enemyGroup: Phaser.GameObjects.Group;
 
   skyBackground: Phaser.GameObjects.TileSprite;
   mountainBackground: Phaser.GameObjects.TileSprite;
   treeBackground: Phaser.GameObjects.TileSprite;
   floorBackground: Phaser.GameObjects.TileSprite;
   ceilingBackground: Phaser.GameObjects.TileSprite;
+  MAX_ENEMIES: number;
 
   constructor() {
     super({ key: 'main' });
 
-
+    this.MAX_ENEMIES = 5;
   }
 
   preload() {
@@ -53,24 +56,19 @@ export class MainScene extends Phaser.Scene {
 
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(960, GameOptions.groundPositionY, 'ground', null, false);
+    this.enemyGroup = this.add.group();
 
     AssetUtil.createFullCharacterAnimation(this.anims);
     AssetUtil.createFullEnemiesAnimation(this.anims);
 
     this.player = new PlayerSprite(this, 0, 0, 'ninjaGirl_Idle');
-    this.player.setSize(280, 500);
-    this.player.setOffset(0, 0);
-    this.player.setOrigin(0, 0);
-    this.player.setScale(0.2);
-    this.player.setBounce(0);
-    this.player.setCollideWorldBounds(true);
-
-    this.enemies = [];
 
     this.add.existing(this.player);
 
     this.physics.add.collider(this.player, this.platforms);
-
+    this.physics.add.collider(this.enemyGroup, this.platforms);
+    this.physics.add.collider(this.enemyGroup, this.enemyGroup);
+    this.physics.add.collider(this.player, this.enemyGroup);
   }
 
   update() {
@@ -88,24 +86,27 @@ export class MainScene extends Phaser.Scene {
   }
 
   updateEnemies() {
-    if (this.enemies.length < 5) {
-      for (let i = 1; i <= 5; i++) {
-        const newEnemyPositionX: number = (GameOptions.width / 2) + 200 * i;
-        const newEnemyPositionY: number = Util.getRandomInt(0, GameOptions.height / 3);
-        const newEnemyName: string = 'enemy' + i;
 
-        const newEnemy = new EnemySprite(this, newEnemyPositionX, newEnemyPositionY, newEnemyName)
-
-        this.add.existing(newEnemy);
-
-        this.physics.add.collider(newEnemy, this.platforms);
-
-        this.enemies.push(newEnemy);
-      }
-    }
-
-    this.enemies.forEach(enemy => {
-      enemy.update();
+    this.enemyGroup.children.entries.forEach(enemy => {
+      enemy.update(this.player);
     });
+
+    if (this.enemyGroup.countActive(true) < this.MAX_ENEMIES) {
+
+      this.launchEnemy();
+    }
+  }
+
+  launchEnemy() {
+    const enemy: Enemy = Phaser.Math.Between(0, 4);
+    const newEnemyPositionX: number = Phaser.Math.Between((GameOptions.width / 2), GameOptions.width);
+    const newEnemyPositionY: number = Phaser.Math.Between(0, (GameOptions.height / 2));
+    const enemyNameMap: EnemyMap = new EnemyMap();
+
+    const newEnemy = new EnemySprite(this, newEnemyPositionX, newEnemyPositionY, enemyNameMap.MapToString.get(enemy))
+
+    this.add.existing(newEnemy);
+
+    this.enemyGroup.add(newEnemy);
   }
 }

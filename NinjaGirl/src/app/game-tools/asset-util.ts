@@ -63,11 +63,25 @@ export class AssetUtil {
     }
 
     static loadFullEnemyImageAssets(load: Phaser.Loader.LoaderPlugin) {
-        for (let i = 1; i <= 5; i++) {
-            this.loadCharacterImageAssets(load, 'enemy' + i, 'Die', 9);
-            this.loadCharacterImageAssets(load, 'enemy' + i, 'Flying', 4);
-            this.loadCharacterImageAssets(load, 'enemy' + i, 'Idle', 4);
-        }
+        this.loadCharacterImageAssets(load, 'enemy_green', 'Die', 9);
+        this.loadCharacterImageAssets(load, 'enemy_green', 'Flying', 4);
+        this.loadCharacterImageAssets(load, 'enemy_green', 'Idle', 4);
+
+        this.loadCharacterImageAssets(load, 'enemy_orange', 'Die', 9);
+        this.loadCharacterImageAssets(load, 'enemy_orange', 'Flying', 4);
+        this.loadCharacterImageAssets(load, 'enemy_orange', 'Idle', 4);
+
+        this.loadCharacterImageAssets(load, 'enemy_purple', 'Die', 9);
+        this.loadCharacterImageAssets(load, 'enemy_purple', 'Flying', 4);
+        this.loadCharacterImageAssets(load, 'enemy_purple', 'Idle', 4);
+
+        this.loadCharacterImageAssets(load, 'enemy_red', 'Die', 9);
+        this.loadCharacterImageAssets(load, 'enemy_red', 'Flying', 4);
+        this.loadCharacterImageAssets(load, 'enemy_red', 'Idle', 4);
+
+        this.loadCharacterImageAssets(load, 'enemy_rose', 'Die', 9);
+        this.loadCharacterImageAssets(load, 'enemy_rose', 'Flying', 4);
+        this.loadCharacterImageAssets(load, 'enemy_rose', 'Idle', 4);
     }
 
     static createFullCharacterAnimation(anims: Phaser.Animations.AnimationManager) {
@@ -86,11 +100,25 @@ export class AssetUtil {
     }
 
     static createFullEnemiesAnimation(anims: Phaser.Animations.AnimationManager) {
-        for (let i = 1; i <= 5; i++) {
-            this.createCharacterAnimation(anims, 'enemy' + i, 'Die', 9);
-            this.createCharacterAnimation(anims, 'enemy' + i, 'Flying', 4);
-            this.createCharacterAnimation(anims, 'enemy' + i, 'Idle', 4);
-        }
+        this.createCharacterAnimation(anims, 'enemy_green', 'Die', 9);
+        this.createCharacterAnimation(anims, 'enemy_green', 'Flying', 4);
+        this.createCharacterAnimation(anims, 'enemy_green', 'Idle', 4);
+
+        this.createCharacterAnimation(anims, 'enemy_orange', 'Die', 9);
+        this.createCharacterAnimation(anims, 'enemy_orange', 'Flying', 4);
+        this.createCharacterAnimation(anims, 'enemy_orange', 'Idle', 4);
+
+        this.createCharacterAnimation(anims, 'enemy_purple', 'Die', 9);
+        this.createCharacterAnimation(anims, 'enemy_purple', 'Flying', 4);
+        this.createCharacterAnimation(anims, 'enemy_purple', 'Idle', 4);
+
+        this.createCharacterAnimation(anims, 'enemy_red', 'Die', 9);
+        this.createCharacterAnimation(anims, 'enemy_red', 'Flying', 4);
+        this.createCharacterAnimation(anims, 'enemy_red', 'Idle', 4);
+
+        this.createCharacterAnimation(anims, 'enemy_rose', 'Die', 9);
+        this.createCharacterAnimation(anims, 'enemy_rose', 'Flying', 4);
+        this.createCharacterAnimation(anims, 'enemy_rose', 'Idle', 4);
     }
 
     static loadCharacterImageAssets(load: Phaser.Loader.LoaderPlugin, characterName: string, characterState: string, imagesToLoad: number) {
